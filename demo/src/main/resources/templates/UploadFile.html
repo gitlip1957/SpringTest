@@ -2,77 +2,54 @@
 <html>
 <head>
 <title>Upload Files using XMLHttpRequest - Minimal</title>
-
-<script type="text/javascript">
-      function fileSelected() {
-        var file = document.getElementById('fileToUpload').files[0];
-        if (file) {
-          var fileSize = 0;
-          if (file.size > 1024 * 1024)
-            fileSize = (Math.round(file.size * 100 / (1024 * 1024)) / 100).toString() + 'MB';
-          else
-            fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
-
-          document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
-          document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
-          document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
-          
-          document.getElementById('progressNumber').innerHTML = '';
-          document.getElementById('msg').innerHTML = '';
-        }
-      }
-
-      function uploadFile() {
-        var fd = new FormData();
-        fd.append("file", document.getElementById('fileToUpload').files[0]);
-        var xhr = new XMLHttpRequest();
-        xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", uploadComplete, false);
-        xhr.addEventListener("error", uploadFailed, false);
-        xhr.addEventListener("abort", uploadCanceled, false);
-        xhr.open("POST", "/upload");
-        xhr.send(fd);
-      }
-
-      function uploadProgress(evt) {
-        if (evt.lengthComputable) {
-          var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-          document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
-        }
-        else {
-          document.getElementById('progressNumber').innerHTML = '无法计算';
-        }
-      }
-
-      function uploadComplete(evt) {
-        /* 当服务器响应后，这个事件就会被触发 */
-        document.getElementById('msg').innerHTML = evt.target.responseText; 
-      }
-
-      function uploadFailed(evt) {
-        alert("上传文件发生了错误尝试");
-      }
-
-      function uploadCanceled(evt) {
-        alert("上传被用户取消或者浏览器断开连接");
-      }
-    </script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
 </head>
 <body>
 	<form id="form1" enctype="multipart/form-data" method="post">
 		<div class="row">
 			<label for="fileToUpload">Select a File to Upload</label><br /> <input
-				type="file" name="fileToUpload" id="fileToUpload"
-				onchange="fileSelected();" />
+				type="file" name="fileToUpload" id="uploadFile" />
 		</div>
-
-		<span><div id="fileName"></div> </span> <span><div
-				id="fileSize"></div> </span> <span><div id="fileType"></div> </span> <span>
-			<div class="row">
-				<input type="button" onclick="uploadFile()" value="Upload" />
-			</div>
-			<div id="progressNumber"></div>
-			<div id="msg"></div>
+		<div class="row">
+			<input type="button" onclick="aaa();" value="aaa"></input>
+		</div>
+		<div id="processBar"></div>
 	</form>
+	
+	<script type="text/javascript">
+		function aaa(){                                            
+	        var formData = new FormData();
+	         formData.append("file",$("#uploadFile")[0].files[0]);
+	         $.ajax({
+	            type:"post",
+	            async:true, 
+	            Accept:'text/html;charset=UTF-8',
+	            data:formData,
+	            contentType:"multipart/form-data",
+	            url: "/upload",
+	            processData: false, // 告诉jQuery不要去处理发送的数据
+	            contentType: false, // 告诉jQuery不要去设置Content-Type请求头
+	            xhr:function(){                        
+	                myXhr = $.ajaxSettings.xhr();
+	                if(myXhr.upload){ 
+	                    myXhr.upload.addEventListener('progress',function(e){                            
+	                        var loaded = e.loaded;                  		//已经上传大小情况 
+	                        var total = e.total;                     	 	//附件总大小 
+	                        var percent = Math.floor(100*loaded/total)+"%"; //已经上传的百分比  
+	                        console.log("已经上传了："+percent);                 
+	                        $("#processBar").css("width",percent);                                                                
+	                    }, false); 
+	                }
+	                return myXhr;
+	            },                    
+	            success:function(data){                  
+	                console.log("上传成功!!!!");                        
+	            },
+	            error:function(){
+	                alert("上传失败！");
+	            }
+	        });                             
+		}
+	</script>
 </body>
 </html>
