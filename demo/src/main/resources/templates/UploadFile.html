@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload Files using XMLHttpRequest - Minimal</title>
+<title>Upload Files using XMLHttpRequest - Minimal</title>
 
-    <script type="text/javascript">
+<script type="text/javascript">
       function fileSelected() {
         var file = document.getElementById('fileToUpload').files[0];
         if (file) {
@@ -59,22 +59,20 @@
     </script>
 </head>
 <body>
-  <form id="form1" enctype="multipart/form-data" method="post" >
-    <div class="row">
-      <label for="fileToUpload">Select a File to Upload</label><br />
-      <input type="file" name="fileToUpload" id="fileToUpload" onchange="fileSelected();"/>
-    </div>
-    
-    <span><div id="fileName"></div>  </span>
-    <span><div id="fileSize"></div>  </span>
-    <span><div id="fileType"></div>  </span>
-    <span>
-    	<div class="row">
-	      <input type="button" onclick="uploadFile()" value="Upload" />
-	    </div>
-    <div id="progressNumber"></div>
-    <div id="msg"></div>
-    </span>
-  </form>
+	<form id="form1" enctype="multipart/form-data" method="post">
+		<div class="row">
+			<label for="fileToUpload">Select a File to Upload</label><br /> <input
+				type="file" name="fileToUpload" id="fileToUpload"
+				onchange="fileSelected();" />
+		</div>
+
+		<span><div id="fileName"></div> </span> <span><div
+				id="fileSize"></div> </span> <span><div id="fileType"></div> </span> <span>
+			<div class="row">
+				<input type="button" onclick="uploadFile()" value="Upload" />
+			</div>
+			<div id="progressNumber"></div>
+			<div id="msg"></div>
+	</form>
 </body>
 </html>
