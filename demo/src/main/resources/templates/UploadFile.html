@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8"></meta>
 <title>Upload Files using XMLHttpRequest - Minimal</title>
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 </head>
@@ -13,7 +14,11 @@
 		<div class="row">
 			<input type="button" onclick="aaa();" value="aaa"></input>
 		</div>
-		<div id="processBar"></div>
+		<div class="progress" style="width: 200px;height:20px; border:1px solid #ccc;border-radius: 10px;margin: 10px 0px;overflow: hidden;">
+			<div id="processBar" style=" width: 0px;height: 100%; background-color: yellowgreen;transition: all .3s ease;">
+				<span id="processhtml"></span>
+			</div>
+		</div>
 	</form>
 	
 	<script type="text/javascript">
@@ -27,26 +32,27 @@
 	            data:formData,
 	            contentType:"multipart/form-data",
 	            url: "/upload",
-	            processData: false, // ¸æËßjQuery²»ÒªÈ¥´¦Àí·¢ËÍµÄÊı¾İ
-	            contentType: false, // ¸æËßjQuery²»ÒªÈ¥ÉèÖÃContent-TypeÇëÇóÍ·
+	            processData: false, // å‘Šè¯‰jQueryä¸è¦å»å¤„ç†å‘é€çš„æ•°æ®
+	            contentType: false, // å‘Šè¯‰jQueryä¸è¦å»è®¾ç½®Content-Typeè¯·æ±‚å¤´
 	            xhr:function(){                        
 	                myXhr = $.ajaxSettings.xhr();
 	                if(myXhr.upload){ 
 	                    myXhr.upload.addEventListener('progress',function(e){                            
-	                        var loaded = e.loaded;                  		//ÒÑ¾­ÉÏ´«´óĞ¡Çé¿ö 
-	                        var total = e.total;                     	 	//¸½¼ş×Ü´óĞ¡ 
-	                        var percent = Math.floor(100*loaded/total)+"%"; //ÒÑ¾­ÉÏ´«µÄ°Ù·Ö±È  
-	                        console.log("ÒÑ¾­ÉÏ´«ÁË£º"+percent);                 
-	                        $("#processBar").css("width",percent);                                                                
-	                    }, false); 
+	                        var loaded = e.loaded;                  		//å·²ç»ä¸Šä¼ å¤§å°æƒ…å†µ 
+	                        var total = e.total;                     	 	//é™„ä»¶æ€»å¤§å° 
+	                        var percent = Math.floor(100*loaded/total)+"%"; //å·²ç»ä¸Šä¼ çš„ç™¾åˆ†æ¯”  
+	                        console.log("å·²ç»ä¸Šä¼ äº†ï¼š"+percent);                 
+	                        $("#processBar").css("width",percent);
+	                        $("#processhtml").html(percent);
+	                    }, true); 
 	                }
 	                return myXhr;
 	            },                    
 	            success:function(data){                  
-	                console.log("ÉÏ´«³É¹¦!!!!");                        
+	                console.log("ä¸Šä¼ æˆåŠŸ!!!!");                        
 	            },
 	            error:function(){
-	                alert("ÉÏ´«Ê§°Ü£¡");
+	                alert("ä¸Šä¼ å¤±è´¥ï¼");
 	            }
 	        });                             
 		}
